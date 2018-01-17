@@ -1,0 +1,43 @@
+/* First revision of code for the electronic load. 
+Features in this version:
+
+1) Display functionality
+2) Constant current mode, set by turning knob
+3) Enable/disable load by pushing button
+
+*/
+
+//Pin Assignments
+//DAC Shift Register; 16 bit serial
+#define DAC_c = 2, DAC_l = 3, DAC_d = 4;
+
+//Display shift register; 6 bit serial (takes 8 bits)
+#define DISP_c = 7, DISP_l = 6, DISP_d = 8;
+
+#define VIN = 5;
+
+void setup() {
+
+  // put your setup code here, to run once:
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly: 
+  
+}
+
+
+class ShiftRegister {
+	int clockPin, latchPin, dataPin;
+
+	public:
+	void ShiftRegister(int c, int l, int d)
+	{
+		clockPin = c;
+		latchPin = l;
+		dataPin = d;
+	}
+
+
+}

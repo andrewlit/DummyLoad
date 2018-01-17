@@ -1,0 +1,17 @@
+NUMBER	PORT	CONNECTION
+2	1.0	DAC Clock
+3	1.1	DAC Latch
+4	1.2	DAC Serial Data
+5	1.3	Input Voltage ADC
+6	1.4	Display Latch
+7	1.5	Display Clock
+8	2.0	Display Serial Data
+9	2.1	Rotary Encoder Push Switch
+10	2.2	Buzzer
+11	2.3	SD Buffer pin 3
+12	2.4	Reset switch
+13	2.5	Rotary encoder pin 1
+14	1.6	Rotary encoder pin 3
+15	1.7	SD Buffer 4
+18	2.7	SD Buffer 5
+19	2.6	SD Buffer 7
