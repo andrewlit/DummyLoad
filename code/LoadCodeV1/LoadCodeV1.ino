@@ -24,6 +24,7 @@ Features in this version:
 
 LiquidCrystal595 lcd ( DISP_d, DISP_l, DISP_c);
 
+//Currently this is just test code to verify the basic functions of the device
 void setup() {
 
 delay (1000);
