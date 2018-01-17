@@ -24,7 +24,10 @@ Features in this version:
 
 LiquidCrystal595 lcd ( DISP_d, DISP_l, DISP_c);
 
+<<<<<<< HEAD
 //WOW WE BE GETTIN EXPERIMENTAL BOIZZZZZZZZZZZZZZZZZ
+=======
+>>>>>>> parent of 7ac6764... Added a comment to a file.
 void setup() {
 
 delay (1000);
