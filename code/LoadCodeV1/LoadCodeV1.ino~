@@ -1,3 +1,5 @@
+#include <LiquidCrystal595.h>
+
 /* First revision of code for the electronic load. 
 Features in this version:
 
@@ -9,35 +11,34 @@ Features in this version:
 
 //Pin Assignments
 //DAC Shift Register; 16 bit serial
-#define DAC_c = 2, DAC_l = 3, DAC_d = 4;
+#define DAC_c 2
+#define DAC_l 3
+#define DAC_d 4
 
 //Display shift register; 6 bit serial (takes 8 bits)
-#define DISP_c = 7, DISP_l = 6, DISP_d = 8;
+#define DISP_c 7
+#define DISP_l 6
+#define DISP_d 8
 
-#define VIN = 5;
+#define VIN 5
 
+LiquidCrystal595 lcd ( DISP_d, DISP_l, DISP_c);
+
+//Currently this is just test code to verify the basic functions of the device
 void setup() {
 
-  // put your setup code here, to run once:
+delay (1000);
+  lcd.begin(20, 4);
+  lcd.clear();
+  lcd.home();
+  lcd.print("Hello there");
 
 }
-
+int x =0;
 void loop() {
-  // put your main code here, to run repeatedly: 
-  
+delay (1000);
+lcd.clear();
+lcd.print(x);
+x++;  
 }
 
-
-class ShiftRegister {
-	int clockPin, latchPin, dataPin;
-
-	public:
-	void ShiftRegister(int c, int l, int d)
-	{
-		clockPin = c;
-		latchPin = l;
-		dataPin = d;
-	}
-
-
-}
