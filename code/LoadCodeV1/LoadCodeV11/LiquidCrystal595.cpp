@@ -28,34 +28,34 @@
  *
  * -----Shift Reg to LCD--------
  * SR Pin 15  - ENABLE        10000000
- * SR Pin 1   - D7            00000010
- * SR Pin 2   - D6            00000100
- * SR Pin 3   - D5            00001000
- * SR Pin 4   - D4            00010000
+ * SR Pin 1   - D7            00000100
+ * SR Pin 2   - D6            00001000
+ * SR Pin 3   - D5            00010000
+ * SR Pin 4   - D4            00100000
  * SR Pin 5   - MOSFET / LED1 00100000
- * SR Pin 6   - LED 2         01000000
- * SR Pin 7   - RS            00000001
+ * SR Pin 7   - RS            01000000
+ * SR Pin 7   - NA            00000001
  *
  * -----------------------------------------------------------------------------------
  */
 // 595 mappings - LED1 is also the backlight controller
 
-#define ENABLE_PIN  B00000001
-#define RS_PIN    B10000000
+#define ENABLE_PIN  B10000000
+#define RS_PIN    B01000000
 #define LED1_PIN    B00100000
 #define LED2_PIN    B01000000
-#define DATABITS  B00011110
-#define PIN_D4    B00010000
-#define PIN_D5    B00001000
-#define PIN_D6    B00000100
-#define PIN_D7    B00000010
+#define DATABITS  B00111100
+#define PIN_D4    B00100000
+#define PIN_D5    B00010000
+#define PIN_D6    B00001000
+#define PIN_D7    B00000100
 
 #include "LiquidCrystal595.h"
 
 #include <stdio.h>
 #include <string.h>
 #include <inttypes.h>
-#include "Arduino.h"
+#include "Energia.h"
 
 // When the display powers up, it is configured as follows:
 //
@@ -328,11 +328,11 @@ void LiquidCrystal595::pulseEnable(void)
   setEPin(LOW);   // LOW
   shift595();
   
-  delayMicroseconds(1);
+  delayMicroseconds(4);
   setEPin(HIGH);    // HIGH
   shift595();
   
-  delayMicroseconds(1); // enable pulse must be >450ns
+  delayMicroseconds(4); // enable pulse must be >450ns
   
   setEPin(LOW);   // LOW
   shift595();

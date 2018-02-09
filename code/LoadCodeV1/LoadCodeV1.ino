@@ -16,18 +16,14 @@ Features in this version:
 #define DAC_d 4
 
 //Display shift register; 6 bit serial (takes 8 bits)
-#define DISP_c 7
-#define DISP_l 6
-#define DISP_d 8
+#define DISP_c P1_5
+#define DISP_l P1_4
+#define DISP_d P2_0
 
 #define VIN 5
 
 LiquidCrystal595 lcd ( DISP_d, DISP_l, DISP_c);
 
-<<<<<<< HEAD
-//WOW WE BE GETTIN EXPERIMENTAL BOIZZZZZZZZZZZZZZZZZ
-=======
->>>>>>> parent of 7ac6764... Added a comment to a file.
 void setup() {
 
 delay (1000);
