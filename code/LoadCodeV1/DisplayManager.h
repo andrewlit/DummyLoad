@@ -134,14 +134,12 @@ private:
   void nextObj()
   {
     currentObject = currentObject->next;
-    Serial.println(currentObject->x);
   }
 
   //Move to the previous object
   void prevObj()
   {
     currentObject = currentObject->prev;
-    Serial.println(currentObject->x);
   }
 
   void objAppendVal(String append)

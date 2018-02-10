@@ -1,17 +1,3 @@
-/*
- This is the main code for the electronic load.
-
- The LCD layout will be something like this:
-
- 
-++++++++++++++++
-  Set: x.xxx A/W
-  Cut: x.xxx A/W/V
-x.xxx A  xx.xx V
-xx.xx W  Logging
-++++++++++++++++
- 
- */
 #include"LiquidCrystal595.h"
 #include"DisplayManager.h"
 

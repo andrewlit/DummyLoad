@@ -77,7 +77,7 @@ class DisplayList
       tail->next = temp;
       temp->prev = tail;
       temp->next = head;
-      head->prev=tail;
+      head->prev=temp;
       tail = temp;
       temp=NULL;
     }
@@ -134,7 +134,6 @@ private:
   void nextObj()
   {
     currentObject = currentObject->next;
-    Serial.println(currentObject->x);
   }
 
   //Move to the previous object
