@@ -74,6 +74,7 @@ class DisplayList
     else
     {
       tail->next = temp;
+      temp->prev = tail;
       tail = temp;
       tail->next = head;
       head->prev = tail;
@@ -131,12 +132,14 @@ private:
   void nextObj()
   {
     currentObject = currentObject->next;
+    Serial.println(currentObject->x);
   }
 
   //Move to the previous object
   void prevObj()
   {
     currentObject = currentObject->prev;
+    Serial.println(currentObject->x);
   }
 
   void objAppendVal(String append)
