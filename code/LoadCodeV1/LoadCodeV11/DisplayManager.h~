@@ -77,7 +77,7 @@ class DisplayList
       tail->next = temp;
       temp->prev = tail;
       temp->next = head;
-      head->prev=temp;
+      head->prev=tail;
       tail = temp;
       temp=NULL;
     }

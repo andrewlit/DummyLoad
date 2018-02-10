@@ -96,6 +96,7 @@ void loop() {
       {
         dispman.prevObj();
         dispman.objAppendCursor();
+	flash(14);
       }
     }
     if(MODE) dispman.objAppendVal();
