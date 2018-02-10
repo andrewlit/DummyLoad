@@ -30,10 +30,6 @@ LiquidCrystal595 lcd ( DISP_d, DISP_l, DISP_c);
   DisplayManager dispman (&lcd);
 void setup() {
 
-//	serial.begin(4800);
-//	serial.println("hi");
-//	serial.println("How do you do?");
-//	serial.println("is anybody in there?");
   pinMode(V_in, INPUT);
   pinMode (DAC_c, OUTPUT);
   pinMode (DAC_l, OUTPUT);
@@ -58,6 +54,7 @@ void setup() {
   dispman.addObj(0,0, "Param 1:");
   dispman.addObj(0,1, "Param 2:");
   dispman.addObj(4, 3, "Param 3:");
+  dispman.addObj(0,2,"Param 4:");
   dispman.update();
   lcd.cursor();
   dispman.objAppendCursor();
