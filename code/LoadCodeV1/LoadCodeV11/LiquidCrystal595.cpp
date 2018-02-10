@@ -41,14 +41,14 @@
 // 595 mappings - LED1 is also the backlight controller
 
 #define ENABLE_PIN  B10000000
-#define RS_PIN    B01000000
-#define LED1_PIN    B00100000
-#define LED2_PIN    B01000000
-#define DATABITS  B00111100
-#define PIN_D4    B00100000
-#define PIN_D5    B00010000
-#define PIN_D6    B00001000
-#define PIN_D7    B00000100
+#define RS_PIN      B01000000
+#define LED1_PIN    B00000010
+#define LED2_PIN    B00000001
+#define DATABITS    B00111100
+#define PIN_D4      B00100000
+#define PIN_D5      B00010000
+#define PIN_D6      B00001000
+#define PIN_D7      B00000100
 
 #include "LiquidCrystal595.h"
 
@@ -78,14 +78,20 @@
 
 LiquidCrystal595::LiquidCrystal595(uint8_t datapin, uint8_t latchpin, uint8_t clockpin)
 {
-  init(datapin, latchpin, clockpin);
+  _datapin  = datapin;
+  _latchpin = latchpin;
+  _clockpin = clockpin;
+  //init(datapin, latchpin, clockpin);
+}
+void LiquidCrystal595::init(){
+  init(_datapin, _latchpin, _clockpin);
 }
 
 // Performs the shift, MSB first 
 void LiquidCrystal595::shift595()
 {
     digitalWrite(_latchpin, LOW);
-    shiftOut(_datapin, _clockpin, MSBFIRST, _register);  
+    shiftOut(_datapin, _clockpin, LSBFIRST, _register);  
     digitalWrite(_latchpin, HIGH);
 }
 
@@ -98,10 +104,10 @@ void LiquidCrystal595::init(uint8_t datapin, uint8_t latchpin, uint8_t clockpin)
    pinMode(_datapin, OUTPUT);
    pinMode(_latchpin, OUTPUT);
    pinMode(_clockpin, OUTPUT);
-   
-   _displayfunction = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS;
-  
-  begin(16, 1);  
+   _displayfunction = LCD_4BITMODE | LCD_2LINE | LCD_5x8DOTS;
+   digitalWrite(2, HIGH);
+  begin(20, 4, LCD_5x8DOTS);
+  //digitalWrite(14, HIGH);
 }
 
 void LiquidCrystal595::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) 
