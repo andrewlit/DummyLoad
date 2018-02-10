@@ -38,6 +38,10 @@ const int BUZZER = 10;
 const int VIN = 5;
 
 
+
+  unsigned short num1 = 32;
+  unsigned short num2 = 60;
+  unsigned short num3 = 3;
 LiquidCrystal595 lcd ( DISP_d, DISP_l, DISP_c);
 
 
@@ -64,21 +68,25 @@ void setup() {
   lcd.home();
   lcd.print(0);
 
-  
-  dispman.addObj(0,0, "Param 1:");
-  dispman.addObj(0,1, "Param 2:");
-  dispman.addObj(4, 3, "Param 3:");
-  dispman.addObj(0,2,"Param 4:");
-  dispman.update();
+  //char name[] = "na1:";
+
+  dispman.addObj(0,0, "hi",  &num1, 0, 2);
+  //dispman.addObj(5,1, "Thing 2:",  &num2, 1, 3);
+  //dispman.addObj(2,2, "Thing 3:", &num2, 0, 2);
+  //dispman.addObj(0,3, "Thing 4:", &num1, 1,2);
+
+  //dispman.update();
+  dispman.show();
   lcd.cursor();
-  dispman.objAppendCursor();
+  //dispman.objAppendCursor();
+  flash(2);
+  delay(1000);
 }
 
-int x = 0;
-int inc = 1;
+short inc = 1;
 bool MODE = 0;
 
-int n = 0;
+bool n = 0;
 
 void loop() {
   
@@ -96,7 +104,7 @@ void loop() {
       if (MODE) dispman.objIncrementVal(1);
       else 
       {
-        dispman.nextObj();
+        dispman.nextObjCheck();
         dispman.objAppendCursor();
       }
     }
@@ -105,22 +113,26 @@ void loop() {
       if (MODE) dispman.objIncrementVal(-1);
       else
       {
-        dispman.prevObj();
+        dispman.prevObjCheck();
         dispman.objAppendCursor();
       }
     }
-    if(MODE) dispman.objAppendVal();
+    if(MODE) dispman.objAppendParam();
   }
   if (digitalRead(ENC_button) == LOW) 
   {
     MODE = !MODE;
     if (MODE) lcd.blink();
-    else lcd.noBlink(); 
+    else {
+	    lcd.noBlink(); 
+	    updateParams();
+	    dispman.update();
+    }
     delay(200);
   }
  
 }
-void flash(int pin)
+void flash(byte pin)
 {
   digitalWrite(pin, HIGH);
   delay (500);
@@ -138,12 +150,20 @@ void dacOut(int val)
 
 //Turns out the buzzer actually has an internal oscillator, so all we have to
 // do is pull the pin high
-void beep(int duration)
+void beep(unsigned short duration)
 {
   digitalWrite(BUZZER, HIGH);
   delay(duration);
   digitalWrite(BUZZER, LOW);
 }
+
+//Update and dependent parameters
+void updateParams()
+{
+	num2 = 15*num1;
+}
+
+
 
 
 

@@ -16,32 +16,79 @@ class DisplayObject
   DisplayObject *prev;
   
   private:
-  short x, y;
-  int val;
-  String text;
+  byte x, y;
+  unsigned short* param;
+  byte decimal;
+  byte nx;
+  bool displayOnly;
+
   public:
-  DisplayObject (short xval, short yval, String t)
+  DisplayObject (byte xval, byte yval, char t[])
   {
     x = xval;
     y = yval;
-    text = t;
-    val = 0;
+    param=NULL;
+    displayOnly = 0;
+    decimal = 2;
+    nx=x;
   }
 
-  void setPos(short xval, short yval)
+  DisplayObject (byte xval, byte yval, byte nextX, unsigned short* p)
+  {
+    x = xval;
+    y = yval;
+    nx=x;
+    param=p;
+    displayOnly = 0;
+    decimal=2;
+
+  }
+
+  void setDisplayOnly(bool d)
+  {
+	  displayOnly = d;
+  }
+
+  void setDecimal(byte d)
+  {
+	  decimal = d;
+  }
+
+  void setPos(byte xval, byte yval)
   {
     x = xval;
     y = yval;
   }
 
-  void setText(String t)
+  void setParam(unsigned short* p)
   {
-    text = t;
+	  param=p;
+  }
+  void incParam(unsigned short increment)
+  {
+	  *param += increment;
   }
 
-  int nextX()
+  unsigned short* getParam()
   {
-    return x+text.length();
+	  return param;
+  }
+  
+  int getParamVal()
+  {
+	  return *param;
+  }
+
+
+
+  void setNextX(byte n)
+  {
+	  nx = n;
+  }
+
+  byte nextX()
+  {
+    return nx;
   }
 };
 
@@ -57,10 +104,14 @@ class DisplayList
     tail = NULL;
   }
 
-  void addObj(short xval, short yval, String t)
+  void addObj(short xval, short yval, byte nextx, unsigned short* param, bool dispOnly, byte decimal)
   {
     //Create a new display object
-    DisplayObject *temp = new DisplayObject(xval, yval, t);
+    DisplayObject *temp = new DisplayObject(xval, yval, nextx, param);
+	    
+    temp->setDisplayOnly(dispOnly);
+    temp->setDecimal(decimal);
+
     temp->next = NULL;
     temp->prev=NULL;
 
@@ -94,8 +145,7 @@ class DisplayList
 class DisplayManager {
 private:
   LiquidCrystal595* lcd;
-  String content[4];
-  bool mode;
+  char content[4][20];
   DisplayList items;
   DisplayObject* currentObject ;
   
@@ -103,7 +153,6 @@ private:
   DisplayManager (LiquidCrystal595 *disp)
   {
     lcd = disp;
-    mode = 0;
     currentObject = NULL;
     
     dispClear();
@@ -112,23 +161,24 @@ private:
   void dispClear()
   {
     //Initialize the array of lines
-    for (int x = 0; x < 4; x ++)
-      content[x] = "                    ";
+    for (byte x = 0; x < 4; x ++)
+    {
+	    for (byte y = 0; y < 20; y++)
+      		content[x][y] = ' ';
+    }
   }
 
-  void addObj(short xval, short yval, String t)
+  void addObj(short xval, short yval, char t[], unsigned short* param, bool d, byte dec)
   {
-    items.addObj(xval, yval, t);
+    items.addObj(xval, yval,xval+sizeof(t), param, d, dec);
+    //Add the text
+    for (int x =0; x < sizeof(t); x++)
+	content[yval][x]=t[x+xval];
+
     if (currentObject == NULL) 
       currentObject = items.getHead();
   }
 
-  void addObj(DisplayObject o)
-  {
-    items.addObj(o.x, o.y, o.text);
-    if (currentObject == NULL) 
-      currentObject = items.getHead();
-  }
 
   //Move to the next object
   void nextObj()
@@ -142,49 +192,76 @@ private:
     currentObject = currentObject->prev;
   }
 
+  //Move to the next object, paying attention to editability
+  void nextObjCheck()
+  {
+    currentObject = currentObject->next;
+    if (currentObject->displayOnly) nextObjCheck();
+  }
+
+  //Move to the previous object, paying attention to editability
+  void prevObjCheck()
+  {
+    currentObject = currentObject->prev;
+    if (currentObject->displayOnly) prevObjCheck();
+  }
+
   void objAppendVal(String append)
   {
     lcd->setCursor(currentObject->nextX(), currentObject->y);
     lcd->print(append);
   }
 
-  void objAppendVal()
+  void objAppendParam()
   {
     lcd->setCursor(currentObject->nextX(), currentObject->y);
-    lcd->print(currentObject->val);
+    lcd->print(addDecimal(currentObject->getParamVal(),currentObject->decimal));
   }
 
-  void objIncrementVal(int i)
+  void objAppendParam(DisplayObject* o)
   {
-    currentObject->val +=i;
+    lcd->setCursor(o->nextX(), o->y);
+    lcd->print(addDecimal(o->getParamVal(),o->decimal));
+  }
+
+  void objBufferParam(DisplayObject* o)
+  {
+	short startx=o->nx;
+	String s=addDecimal(o->getParamVal(),o->decimal);
+	
+	
+	for (byte x = 0; x<s.length(); x++)
+		content[o->y][startx+x]= s.charAt(x);
+  }
+
+  unsigned short* objIncrementVal(unsigned short i)
+  {
+    currentObject->incParam(i);
+    return currentObject->param;
   }
 
   void objAppendCursor()
   {
  
     lcd->setCursor(currentObject->nextX(), currentObject->y);
+    lcd->cursor();
   }
 
-  void objAppendVal(int append)
+  void objAppendVal(unsigned short append)
   {
     lcd->setCursor(currentObject->nextX(), currentObject->y);
-    lcd->print(append);
+    String ap = String(append);
+    lcd->print(ap.substring(0, ap.length()-2)+"."+ap.substring(ap.length()-2));
   }
 
-  void add(DisplayObject o)
-  {
-    short startx = o.x;
-    short len = o.text.length();
-    for (int x = 0; x < len; x ++)
-      content[o.y].setCharAt(startx+x, o.text.charAt(x));
-  }
 
   void update()
   {
     DisplayObject* temp = currentObject;
-    dispClear();
+    //dispClear();
     do{
-      add(*temp);
+      //add(*temp);
+     objBufferParam(temp);
       temp = temp->next;
     }while (temp != currentObject);
     show();
@@ -193,11 +270,31 @@ private:
   void show()
   {
     lcd->noCursor();
-    for (int x = 0; x < 4; x ++)
+    for (byte x = 0; x < 4; x ++)
     {
       lcd->setCursor(0,x);
       lcd -> print(content[x]);
     }
+  }
+
+  String addDecimal(unsigned short n, byte places)
+  {
+    String s = String(n);
+    String zeroes="";
+    if(s.length()>places)
+    	s=s.substring(0, s.length()-places)+"."+s.substring(s.length()-places);
+    else
+    {
+	    for (byte x = 0; x < places-s.length(); x++)
+		    zeroes+="0";
+	    s ="."+ s+zeroes;
+    }
+    zeroes="";
+
+    for (byte x =5; x >s.length(); x--)
+	    zeroes += "0";
+
+    return zeroes+s;
   }
   
 };

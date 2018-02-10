@@ -6,12 +6,20 @@ NUMBER	PORT	CONNECTION
 6	1.4	Display Latch
 7	1.5	Display Clock
 8	2.0	Display Serial Data
-9	2.1	J3 Pin 9
-10	2.2	J3 Pin 10
-11	2.3	J4 Pin 5
-12	2.4	J4 Pin 3
-13	2.5	J4 Pin 6
-14	1.6	J4 Pin 8
-15	1.7	J4 Pin 10
-18	2.7	J4 Pin 7
-19	2.6	J4 Pin 9
+9	2.1	Rotary Encoder Push Switch
+10	2.2	Buzzer
+11	2.3	SD Buffer pin 3
+12	2.4	Reset switch
+13	2.5	Rotary encoder pin 1
+14	1.6	Rotary encoder pin 3
+15	1.7	SD Buffer 4
+18	2.7	SD Buffer 5
+19	2.6	SD Buffer 7
+
+
+++++++++++++++++
+  Set: x.xxx A/W
+  Cut: x.xxx A/W/V
+x.xxx A  xx.xx V
+xx.xx W  Logging
+++++++++++++++++
