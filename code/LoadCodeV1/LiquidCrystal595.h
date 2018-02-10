@@ -94,6 +94,7 @@ public:
   LiquidCrystal595(uint8_t datapin, uint8_t latchpin, uint8_t clockpin);
 
   void init(uint8_t datapin, uint8_t latchpin, uint8_t clockpin);
+  void init ();
     
   void begin(uint8_t cols, uint8_t rows, uint8_t charsize = LCD_5x8DOTS);
 
