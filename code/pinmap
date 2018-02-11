@@ -15,3 +15,11 @@ NUMBER	PORT	CONNECTION
 15	1.7	SD Buffer 4
 18	2.7	SD Buffer 5
 19	2.6	SD Buffer 7
+
+
+++++++++++++++++
+Set: x.xxx A/W
+Cut: x.xxx A/W/V
+x.xxx A  xx.xx V
+xx.xx W  Logging
+++++++++++++++++
