@@ -84,6 +84,7 @@ void setup() {
 
 
   digitalWrite(BUZZER, LOW);
+  dacOut(0);
   lcd.init();
 
 
@@ -121,19 +122,19 @@ void setup() {
 
 
   putDisplay(DISP_OFF);
-  delay(1000);
   updateParams();
   showParam(&voltage);
   showParam(&current);
   showParam(&cutoff);
   showParam(&power);
-  delay(1000);
   lcd.cursor();
+  
 }
 
 bool MODE = 0;
 bool n = 0;
-short CURRENT_PARAM = 0;
+word updateCount = 0;
+unsigned short CURRENT_PARAM = 0;
 
 void loop() {
 
@@ -212,8 +213,11 @@ void loop() {
   if (digitalRead(RES_SW) == LOW)
   {
 	  BUZZER_ON = !BUZZER_ON;
-	  delay(300);
+	  delay(500);
     }
+
+  if (updateCount == 65000) updateCount=0;
+  if (!MODE && updateCount++ == 0 ) updateParams();
 }
 
 void putDisplay(char data[4][21])
@@ -243,9 +247,13 @@ void showParam(parameter *p)
 
 void updateParams()
 {
+	lcd.noCursor();
 	power.value = (current.value/100)*(cutoff.value/10);
+	voltage.value = analogRead(V_in)*2.52; //This is from the 1/7.8 voltage divider and the max value of 1023
 	showParam(&power);
+	showParam(&voltage);
 	putCursor();
+	lcd.cursor();
 }
 
 void redraw()
@@ -280,7 +288,7 @@ void flash(int pin)
   delay (500);
 }
 
-void dacOut(int val)
+void dacOut(unsigned short val)
 {
   digitalWrite(DAC_l, LOW);
   shiftOut (DAC_d, DAC_c, MSBFIRST, val);
